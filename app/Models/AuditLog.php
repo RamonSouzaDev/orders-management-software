@@ -68,6 +68,22 @@ class AuditLog extends Model
     }
 
     /**
+     * Extrai o valor do status (string ou Enum).
+     */
+    private static function getStatusValue(mixed $status): string
+    {
+        if (is_string($status)) {
+            return $status;
+        }
+        
+        if (is_object($status) && property_exists($status, 'value')) {
+            return $status->value;
+        }
+        
+        return (string) $status;
+    }
+
+    /**
      * Cria um registro de log de criação.
      */
     public static function logCreation(Order $order, ?string $ip = null, ?string $userAgent = null): self
@@ -75,7 +91,7 @@ class AuditLog extends Model
         return self::create([
             'order_id' => $order->id,
             'action' => 'created',
-            'new_value' => $order->status->value,
+            'new_value' => self::getStatusValue($order->status),
             'changes' => $order->toArray(),
             'ip_address' => $ip,
             'user_agent' => $userAgent,
@@ -112,7 +128,7 @@ class AuditLog extends Model
         return self::create([
             'order_id' => $order->id,
             'action' => 'deleted',
-            'old_value' => $order->status->value,
+            'old_value' => self::getStatusValue($order->status),
             'ip_address' => $ip,
             'user_agent' => $userAgent,
             'created_at' => now(),
