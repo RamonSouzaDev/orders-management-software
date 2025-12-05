@@ -497,13 +497,32 @@
         }
 
         .item-form {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr auto;
-            gap: 0.75rem;
-            align-items: end;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .item-form .item-input-name {
+            flex: 2;
+            min-width: 150px;
+        }
+
+        .item-form .item-input-qty {
+            flex: 0 0 70px;
+        }
+
+        .item-form .item-input-price {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .item-form .item-btn-add {
+            flex: 0 0 40px;
         }
 
         .item-form input {
+            width: 100%;
             padding: 0.75rem;
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -516,6 +535,11 @@
         .item-form input:focus {
             outline: none;
             border-color: var(--accent-primary);
+        }
+
+        .item-form .btn {
+            height: 42px;
+            width: 100%;
         }
 
         .items-list {
@@ -660,10 +684,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .item-form {
-                grid-template-columns: 1fr;
-            }
-
             .container {
                 padding: 1rem;
             }
@@ -734,10 +754,18 @@
                             <h3>Itens do Pedido</h3>
                         </div>
                         <div class="item-form">
-                            <input type="text" id="itemName" placeholder="Nome do produto">
-                            <input type="number" id="itemQty" placeholder="Qtd" min="1" value="1">
-                            <input type="number" id="itemPrice" placeholder="Preço" min="0.01" step="0.01">
-                            <button type="button" class="btn btn-secondary btn-sm" onclick="addItem()">+</button>
+                            <div class="item-input-name">
+                                <input type="text" id="itemName" placeholder="Nome do produto">
+                            </div>
+                            <div class="item-input-qty">
+                                <input type="number" id="itemQty" placeholder="Qtd" min="1" value="1">
+                            </div>
+                            <div class="item-input-price">
+                                <input type="number" id="itemPrice" placeholder="Preço (R$)" min="0.01" step="0.01">
+                            </div>
+                            <div class="item-btn-add">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="addItem()">+</button>
+                            </div>
                         </div>
                         <div class="items-list" id="itemsList"></div>
                     </div>

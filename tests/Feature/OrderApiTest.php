@@ -15,6 +15,17 @@ class OrderApiTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * Setup before each test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Garantir que as tabelas existam
+        $this->artisan('migrate', ['--force' => true]);
+    }
+
+    /**
      * Testa criação de pedido via API.
      */
     public function test_can_create_order_via_api(): void
@@ -57,9 +68,9 @@ class OrderApiTest extends TestCase
         // Verifica cálculos
         // Subtotal: (2 * 50) + (1 * 100) = 200
         // Total: 200 - 10 + 5 = 195
-        $response->assertJsonPath('data.subtotal', 200.0);
-        $response->assertJsonPath('data.total', 195.0);
-        $response->assertJsonPath('data.status', 'draft');
+        $this->assertEquals(200.0, $response->json('data.subtotal'));
+        $this->assertEquals(195.0, $response->json('data.total'));
+        $this->assertEquals('draft', $response->json('data.status'));
     }
 
     /**
@@ -127,4 +138,3 @@ class OrderApiTest extends TestCase
             ->assertJsonValidationErrors(['items.0.unit_price']);
     }
 }
-
