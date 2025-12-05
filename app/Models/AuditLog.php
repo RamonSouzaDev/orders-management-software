@@ -92,7 +92,7 @@ class AuditLog extends Model
             'order_id' => $order->id,
             'action' => 'created',
             'new_value' => self::getStatusValue($order->status),
-            'changes' => $order->toArray(),
+            'changes' => json_encode($order->toArray()),
             'ip_address' => $ip,
             'user_agent' => $userAgent,
             'created_at' => now(),
