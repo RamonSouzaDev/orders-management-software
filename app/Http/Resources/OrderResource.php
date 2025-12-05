@@ -20,12 +20,17 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // Garantir que status seja um Enum
+        $status = $this->status instanceof OrderStatus 
+            ? $this->status 
+            : OrderStatus::from($this->status);
+
         return [
             'id' => $this->id,
             'customer_name' => $this->customer_name,
-            'status' => $this->status->value,
-            'status_label' => $this->status->label(),
-            'status_color' => $this->status->color(),
+            'status' => $status->value,
+            'status_label' => $status->label(),
+            'status_color' => $status->color(),
             'subtotal' => (float) $this->subtotal,
             'discount' => (float) ($this->discount ?? 0),
             'tax' => (float) ($this->tax ?? 0),
@@ -34,15 +39,14 @@ class OrderResource extends JsonResource
             'items' => OrderItemResource::collection($this->whenLoaded('items')),
             'items_count' => $this->when(
                 !$this->relationLoaded('items'),
-                $this->items()->count()
+                fn() => $this->items()->count()
             ),
             'allowed_transitions' => array_map(
                 fn(OrderStatus $s) => $s->value,
-                $this->status->allowedTransitions()
+                $status->allowedTransitions()
             ),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
 }
-
