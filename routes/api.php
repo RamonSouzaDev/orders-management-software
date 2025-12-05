@@ -14,28 +14,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('orders')->group(function () {
-    // Listar pedidos (com paginação tradicional)
-    Route::get('/', [OrderController::class, 'index']);
+// Listar pedidos (com paginação tradicional)
+Route::get('/orders', [OrderController::class, 'index']);
 
-    // Listar pedidos (com keyset pagination - diferencial)
-    Route::get('/cursor', [OrderController::class, 'indexWithCursor']);
+// Listar pedidos (com keyset pagination - diferencial)
+Route::get('/orders/cursor', [OrderController::class, 'indexWithCursor']);
 
-    // Criar pedido
-    Route::post('/', [OrderController::class, 'store']);
+// Criar pedido
+Route::post('/orders', [OrderController::class, 'store']);
 
-    // Visualizar pedido
-    Route::get('/{id}', [OrderController::class, 'show'])
-        ->where('id', '[a-f0-9-]{36}');
+// Visualizar pedido
+Route::get('/orders/{id}', [OrderController::class, 'show'])
+    ->where('id', '[a-f0-9-]{36}');
 
-    // Atualizar status
-    Route::put('/{id}/status', [OrderController::class, 'updateStatus'])
-        ->where('id', '[a-f0-9-]{36}');
+// Atualizar status
+Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])
+    ->where('id', '[a-f0-9-]{36}');
 
-    // Excluir pedido (soft delete)
-    Route::delete('/{id}', [OrderController::class, 'destroy'])
-        ->where('id', '[a-f0-9-]{36}');
-});
+// Excluir pedido (soft delete)
+Route::delete('/orders/{id}', [OrderController::class, 'destroy'])
+    ->where('id', '[a-f0-9-]{36}');
 
 // Health check
 Route::get('/health', function () {
@@ -44,4 +42,3 @@ Route::get('/health', function () {
         'timestamp' => now()->toIso8601String(),
     ]);
 });
-
